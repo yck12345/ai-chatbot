@@ -193,15 +193,15 @@ export async function POST(request: Request) {
             selectedChatModel === "chat-model-reasoning"
               ? []
               : [
-                  "getWeather",
-                  "createDocument",
-                  "updateDocument",
-                  "requestSuggestions",
-                  "google_search",
-                ],
+                "getWeather",
+                "createDocument",
+                "updateDocument",
+                "requestSuggestions",
+                // "google_search",
+              ],
           experimental_transform: smoothStream({ chunking: "word" }),
           tools: {
-            google_search:google.tools.googleSearch({}),
+            // google_search:google.tools.googleSearch({}),
             getWeather,
             createDocument: createDocument({ session, dataStream }),
             updateDocument: updateDocument({ session, dataStream }),
@@ -209,7 +209,7 @@ export async function POST(request: Request) {
               session,
               dataStream,
             }),
-            
+
           },
           experimental_telemetry: {
             isEnabled: isProductionEnvironment,
