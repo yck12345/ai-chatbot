@@ -43,6 +43,8 @@ import type { AppUsage } from "@/lib/usage";
 import { convertToUIMessages, generateUUID } from "@/lib/utils";
 import { generateTitleFromUserMessage } from "../../actions";
 import { type PostRequestBody, postRequestBodySchema } from "./schema";
+import { google } from "@ai-sdk/google/"
+import { z } from "zod";
 
 export const maxDuration = 60;
 
@@ -180,6 +182,14 @@ export async function POST(request: Request) {
           system: systemPrompt({ selectedChatModel, requestHints }),
           messages: convertToModelMessages(uiMessages),
           stopWhen: stepCountIs(5),
+          providerOptions: {
+            google: {
+              thinkingConfig: {
+                thinkingBudget: -1,
+                includeThoughts: true,
+              },
+            },
+          },
           experimental_activeTools:
             selectedChatModel === "chat-model-reasoning"
               ? []
@@ -188,9 +198,11 @@ export async function POST(request: Request) {
                   "createDocument",
                   "updateDocument",
                   "requestSuggestions",
+                  "google_search",
                 ],
           experimental_transform: smoothStream({ chunking: "word" }),
           tools: {
+            google_search:google.tools.googleSearch({}),
             getWeather,
             createDocument: createDocument({ session, dataStream }),
             updateDocument: updateDocument({ session, dataStream }),
@@ -198,6 +210,7 @@ export async function POST(request: Request) {
               session,
               dataStream,
             }),
+            
           },
           experimental_telemetry: {
             isEnabled: isProductionEnvironment,
