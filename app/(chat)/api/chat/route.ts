@@ -43,8 +43,7 @@ import type { AppUsage } from "@/lib/usage";
 import { convertToUIMessages, generateUUID } from "@/lib/utils";
 import { generateTitleFromUserMessage } from "../../actions";
 import { type PostRequestBody, postRequestBodySchema } from "./schema";
-import { google } from "@ai-sdk/google/"
-import { z } from "zod";
+import { google } from "@ai-sdk/google"
 
 export const maxDuration = 60;
 
