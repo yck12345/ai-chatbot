@@ -25,6 +25,7 @@ import { myProvider } from "@/lib/ai/providers";
 import { createDocument } from "@/lib/ai/tools/create-document";
 import { getWeather } from "@/lib/ai/tools/get-weather";
 import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
+import { tavilySearch } from "@/lib/ai/tools/tavily-search";
 import { updateDocument } from "@/lib/ai/tools/update-document";
 import { isProductionEnvironment } from "@/lib/constants";
 import {
@@ -197,6 +198,7 @@ export async function POST(request: Request) {
                 "createDocument",
                 "updateDocument",
                 "requestSuggestions",
+                "tavilySearch",
                 // "google_search",
               ],
           experimental_transform: smoothStream({ chunking: "word" }),
@@ -209,7 +211,7 @@ export async function POST(request: Request) {
               session,
               dataStream,
             }),
-
+            tavilySearch,
           },
           experimental_telemetry: {
             isEnabled: isProductionEnvironment,

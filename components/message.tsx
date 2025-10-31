@@ -23,6 +23,7 @@ import { MessageActions } from "./message-actions";
 import { MessageEditor } from "./message-editor";
 import { MessageReasoning } from "./message-reasoning";
 import { PreviewAttachment } from "./preview-attachment";
+import { TavilySearchResultsComponent } from "./tavily-search-results";
 import { Weather } from "./weather";
 
 const PurePreviewMessage = ({
@@ -267,6 +268,37 @@ const PurePreviewMessage = ({
               );
             }
 
+            if (type === "tool-tavilySearch") {
+              const { toolCallId, state } = part;
+
+              return (
+                <Tool defaultOpen={true} key={toolCallId}>
+                  <ToolHeader state={state} type="tool-tavilySearch" />
+                  <ToolContent>
+                    {state === "input-available" && (
+                      <ToolInput input={part.input} />
+                    )}
+                    {state === "output-available" && (
+                      <ToolOutput
+                        errorText={undefined}
+                        output={
+                          "error" in part.output ? (
+                            <div className="rounded border p-2 text-red-500">
+                              Error: {String(part.output.error)}
+                            </div>
+                          ) : (
+                            <TavilySearchResultsComponent
+                              searchResults={part.output}
+                            />
+                          )
+                        }
+                      />
+                    )}
+                  </ToolContent>
+                </Tool>
+              );
+            }
+
             return null;
           })}
 
@@ -336,4 +368,3 @@ export const ThinkingMessage = () => {
     </motion.div>
   );
 };
-
