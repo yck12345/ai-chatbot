@@ -27,6 +27,7 @@ import { getWeather } from "@/lib/ai/tools/get-weather";
 import { requestSuggestions } from "@/lib/ai/tools/request-suggestions";
 import { tavilySearch } from "@/lib/ai/tools/tavily-search";
 import { updateDocument } from "@/lib/ai/tools/update-document";
+import { jigsawDeepResearchTool } from "@/lib/ai/tools/jigsawstack-deep-research";
 import { isProductionEnvironment } from "@/lib/constants";
 import {
   createStreamId,
@@ -199,6 +200,7 @@ export async function POST(request: Request) {
                 "updateDocument",
                 "requestSuggestions",
                 "tavilySearch",
+                "jigsawDeepResearch",
                 // "google_search",
               ],
           experimental_transform: smoothStream({ chunking: "word" }),
@@ -212,6 +214,7 @@ export async function POST(request: Request) {
               dataStream,
             }),
             tavilySearch,
+            jigsawDeepResearch: jigsawDeepResearchTool,
           },
           experimental_telemetry: {
             isEnabled: isProductionEnvironment,
