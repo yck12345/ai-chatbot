@@ -200,7 +200,7 @@ export async function POST(request: Request) {
                 "updateDocument",
                 "requestSuggestions",
                 "tavilySearch",
-                "jigsawDeepResearch",
+                //"jigsawDeepResearch",
                 // "google_search",
               ],
           experimental_transform: smoothStream({ chunking: "word" }),
@@ -214,7 +214,7 @@ export async function POST(request: Request) {
               dataStream,
             }),
             tavilySearch,
-            jigsawDeepResearch: jigsawDeepResearchTool,
+            //jigsawDeepResearch: jigsawDeepResearchTool,
           },
           experimental_telemetry: {
             isEnabled: isProductionEnvironment,
