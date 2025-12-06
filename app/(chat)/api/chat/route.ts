@@ -39,6 +39,7 @@ import {
   saveMessages,
   updateChatLastContextById,
 } from "@/lib/db/queries";
+import type { DBMessage } from "@/lib/db/schema";
 import { ChatSDKError } from "@/lib/errors";
 import type { ChatMessage } from "@/lib/types";
 import type { AppUsage } from "@/lib/usage";
@@ -128,11 +129,14 @@ export async function POST(request: Request) {
     }
 
     const chat = await getChatById({ id });
+    let messagesFromDb: DBMessage[] = [];
 
     if (chat) {
       if (chat.userId !== session.user.id) {
         return new ChatSDKError("forbidden:chat").toResponse();
       }
+      // Only fetch messages if chat already exists
+      messagesFromDb = await getMessagesByChatId({ id });
     } else {
       const title = await generateTitleFromUserMessage({
         message,
@@ -144,9 +148,9 @@ export async function POST(request: Request) {
         title,
         visibility: selectedVisibilityType,
       });
+      // New chat - no need to fetch messages, it's empty
     }
 
-    const messagesFromDb = await getMessagesByChatId({ id });
     const uiMessages = [...convertToUIMessages(messagesFromDb), message];
 
     const { longitude, latitude, city, country } = geolocation(request);
